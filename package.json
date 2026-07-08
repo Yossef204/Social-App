@@ -1,0 +1,33 @@
+{
+  "name": "social",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/main.js",
+  "scripts": {
+    "start:dev": "concurrently \"tsc --watch\" \"node --watch  --env-file=.env .\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
+    "@types/node": "^25.6.2",
+    "@types/nodemailer": "^8.0.0",
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1075.0",
+    "@aws-sdk/s3-request-presigner": "^3.1079.0",
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "firebase-admin": "^14.1.0",
+    "mongoose": "^9.6.2",
+    "multer": "^2.2.0",
+    "nodemailer": "^8.0.7",
+    "redis": "^5.12.1",
+    "zod": "^4.4.3"
+  }
+}
