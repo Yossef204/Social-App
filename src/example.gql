@@ -1,0 +1,69 @@
+query {
+    user{
+        id
+        name
+        email
+        age
+        salary
+        phoneNumber
+        password
+        isEmitter
+    }
+    product{
+        id
+        name
+        price
+        amount
+        discount
+        image
+        coverImage
+        category{
+            id
+            name
+            logo
+            products(count : 5){
+                id
+                name
+                price
+            }
+        }
+        brand{
+            id
+            name
+            logo
+        }
+        reviews(count : 3){
+            id
+            text
+            rate
+            user{
+                id
+                name
+                profilePic
+            }
+        }
+    }
+}
+
+mutation {
+    addProduct(name:"iphone16",price:60000,cid:"12345",seller : "yossef",discount:20){
+        name
+        price
+        category{
+            id
+            name
+            logo
+            products(count : 5, cid : "51234"){
+                id
+                name
+                price
+            }
+        }
+        brand{
+            id
+            name
+            logo
+        }
+    }
+
+}
