@@ -1,12 +1,12 @@
-import {GraphQLID, GraphQLObjectType, GraphQLString} from "graphql/type";
+import {GraphQLID, GraphQLList, GraphQLObjectType, GraphQLString} from "graphql/type";
 
 export const PostType = new GraphQLObjectType({
     name: "ProductQuery"
     , fields:
         {
             id : {type : GraphQLID},
-            title : {type : GraphQLString},
-            description : {type : GraphQLString},
+            content : {type : GraphQLString},
+            attachments : {type :new GraphQLList(GraphQLString)},
             userId : { type : GraphQLID},
         }
 })

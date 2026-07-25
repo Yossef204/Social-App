@@ -9,7 +9,7 @@ import {promisify} from "node:util";
 import {createHandler} from "graphql-http/lib/use/express";
 import {GraphQLObjectType, GraphQLSchema} from "graphql/type";
 import {UserMutation, UserQuery} from "./modules/user/graphql/user.gql";
-import {PostQuery} from "./modules/post/graphql/post.gql";
+import {PostMutation, PostQuery} from "./modules/post/graphql/post.gql";
 
 const pipeLinePromise = promisify(pipeline);
 
@@ -24,7 +24,8 @@ export function bootstrap() {
     let mutation = new GraphQLObjectType({
         name : "RootUser",
         fields : {
-            ...UserMutation
+            ...UserMutation,
+            ...PostMutation
         }
     })
     let query = new GraphQLObjectType({
@@ -40,7 +41,12 @@ export function bootstrap() {
         query,
         mutation
     })
-    app.use('/graphql', createHandler({schema}));
+    app.use('/graphql', createHandler({
+        context:(req)=>{
+            const headers = req.headers;
+            return {headers }
+        }
+        ,schema}));
     app.get('/uploads/*paths', async (req: Request, res: Response, next: NextFunction) => {
         let key = (req.params.paths as string[]).join('/');
         const fileExist = await s3CloudProvider.getFile(key);
