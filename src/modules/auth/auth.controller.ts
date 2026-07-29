@@ -10,6 +10,7 @@ import { loginSchema, resetPasswordSchema, signupSchema, verifyAccountSchema } f
 
 const router = Router();
 
+
 //signup
 router.post('/signup', isValid(signupSchema),async (req: Request, res: Response, next: NextFunction) => {
     //TODO: Implement signup logic
@@ -22,7 +23,17 @@ router.post('/signup', isValid(signupSchema),async (req: Request, res: Response,
         data : {createdUser}
     })
 })
-
+//login
+router.post('/login', isValid(loginSchema),async (req: Request, res: Response, next: NextFunction) => {
+    //call service layer to handle business logic
+    const {accessToken,refreshToken} =await authService.login(req.body);
+    //send response
+    res.status(201).json({
+        message : "User login successfully",
+        success: true,
+        data : {accessToken,refreshToken}
+    })
+})
 router.post('/verify-account', isValid(verifyAccountSchema),async (req: Request, res: Response, next: NextFunction) => {
     //TODO: Implement verify-account logic
     //call service layer to handle business logic

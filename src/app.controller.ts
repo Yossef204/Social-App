@@ -10,6 +10,7 @@ import {createHandler} from "graphql-http/lib/use/express";
 import {GraphQLObjectType, GraphQLSchema} from "graphql/type";
 import {UserMutation, UserQuery} from "./modules/user/graphql/user.gql";
 import {PostMutation, PostQuery} from "./modules/post/graphql/post.gql";
+import {RealtimeGateway} from "./common/realtimeGateway/realtime.gateway";
 
 const pipeLinePromise = promisify(pipeline);
 
@@ -68,7 +69,9 @@ export function bootstrap() {
             details: err instanceof BadRequestException ? err.details : undefined
         })
     })
-    app.listen(port, () => {
+    const server = app.listen(port, () => {
         console.log(`Server is running on port ${port}`);
     });
+    const realtimeGateway = new RealtimeGateway(server);
+    const io = realtimeGateway.io
 }

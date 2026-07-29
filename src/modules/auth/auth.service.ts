@@ -2,12 +2,12 @@
 //using class to follow nestJs style >> dependency injection and separation of concerns
 
 import {
-  BadRequestException,
+  BadRequestException, compare,
   ConflictException,
   encrypt,
-  generateOtp,
+  generateOtp, generateTokens,
   hash,
-  sendMail,
+  sendMail, signToken,
 } from "../../common";
 import { UserRepo } from "../../DB/models/user/user.repository";
 import {
@@ -91,7 +91,30 @@ class AuthService {
     return createdUser;
   }
   //login method
-  login(loginDTO: LoginDTO) {}
+  async login(loginDTO: LoginDTO) {
+    const { email, password } = loginDTO;
+
+    const user = await this.userRepo.getOne({
+      email,
+    });
+
+    const match = await compare(
+        password,
+        user?.password || "dummy_password",
+    );
+
+    if (!user || !match) {
+      throw new BadRequestException("Invalid credentials");
+    }
+
+    const {accessToken , refreshToken} =  generateTokens({
+      sub: user._id.toString(),
+      role: user.role,
+      gender: user.gender,
+      email: user.email,
+    });
+    return {accessToken,refreshToken}
+  }
   //logout method
   logout() {}
   //send otp method

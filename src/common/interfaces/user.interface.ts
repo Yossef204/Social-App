@@ -9,4 +9,5 @@ export interface IUser {
   role: SYS_ROLE;
   provider: SYS_PROVIDER;
   profilePic?: string;
+  credentialsUpdatedAt : Date;
 }
