@@ -29,7 +29,7 @@ router.post('/login', isValid(loginSchema),async (req: Request, res: Response, n
     const {accessToken,refreshToken} =await authService.login(req.body);
     //send response
     res.status(201).json({
-        message : "User login successfully",
+        message : "login successfully",
         success: true,
         data : {accessToken,refreshToken}
     })

@@ -4,6 +4,13 @@ import {NextFunction, Request, Response} from "express";
 import {userRepo} from "../DB/models/user/user.repository";
 import {tokenRepo} from "../DB/models/tokens/tokens.repository";
 
+export interface IUserPayload extends JwtPayload {
+    sub: string;
+    email: string;
+}
+
+
+
 export const isAuthGQL = (context: any) => {
     const authorization = context.headers.authorization;
     const token = authorization.split(' ')[1];
@@ -24,26 +31,14 @@ export const isAuthenticated = async (
     if (!authorization) {
         throw new BadRequestException("Authorization header is required");
     }
-
+    const token = authorization.startsWith("Bearer ")
+        ? authorization.split(" ")[1]
+        : authorization;
     const payload = verifyToken(
-        authorization,
-         "yossefmoooooooooooo",
+        token as string,
+        "yossefmoooooooooooo",
     );
 
-    const user = await userRepo.getOne({
-        _id: payload.sub,
-    });
-
-    if (!user) {
-        throw new BadRequestException("invalid id");
-    }
-
-    if (
-        user.credentialsUpdatedAt.getTime() >
-        (payload.iat as number) * 1000
-    ) {
-        throw new BadRequestException("invalid token");
-    }
 
     const jti = payload.jti;
 
@@ -59,8 +54,7 @@ export const isAuthenticated = async (
         throw new BadRequestException("invalid token");
     }
 
-    (req as any).payload = payload;
-    (req as any).user = user;
-
+    req.payload = payload;
+    req.user = payload ;
     next();
 };

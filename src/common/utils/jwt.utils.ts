@@ -1,5 +1,6 @@
 import jwt, { JwtPayload, SignOptions, Secret } from "jsonwebtoken";
 import crypto from "crypto";
+import {IUserPayload} from "../../middlwares";
 
 export function signToken(
     payload: JwtPayload,
@@ -14,8 +15,8 @@ export function signToken(
 export function verifyToken(
     token: string,
     secret: Secret,
-): JwtPayload {
-    return jwt.verify(token, secret) as JwtPayload;
+): IUserPayload {
+    return jwt.verify(token, secret) as IUserPayload;
 }
 
 export function generateTokens(payload: JwtPayload): {
@@ -24,13 +25,13 @@ export function generateTokens(payload: JwtPayload): {
 } {
     const accessToken = signToken(
         payload,
-        "YoSSEFMOOOOOOOOOOOOO",
-        { expiresIn: 60 },
+        "yossefmoooooooooooo",
+        { expiresIn: "15m" },
     );
 
     const refreshToken = signToken(
         payload,
-        "YoSSEFMOOOOOOOOOOOOO",
+        "yossefmoooooooooooo",
         { expiresIn: "1y" },
     );
 

@@ -109,8 +109,6 @@ class AuthService {
 
     const {accessToken , refreshToken} =  generateTokens({
       sub: user._id.toString(),
-      role: user.role,
-      gender: user.gender,
       email: user.email,
     });
     return {accessToken,refreshToken}

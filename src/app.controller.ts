@@ -8,10 +8,10 @@ import {pipeline} from "node:stream";
 import {promisify} from "node:util";
 import {createHandler} from "graphql-http/lib/use/express";
 import {GraphQLObjectType, GraphQLSchema} from "graphql/type";
-import {UserMutation, UserQuery} from "./modules/user/graphql/user.gql";
+import {UserQuery} from "./modules/user/graphql/user.gql";
 import {PostMutation, PostQuery} from "./modules/post/graphql/post.gql";
 import {RealtimeGateway} from "./common/realtimeGateway/realtime.gateway";
-
+import cors from 'cors';
 const pipeLinePromise = promisify(pipeline);
 
 export function bootstrap() {
@@ -19,15 +19,18 @@ export function bootstrap() {
     const app = express();
     const port = 3000;
     app.use(express.json());
-
+    app.use(cors({
+        origin : "*"
+    }))
     connectDB();
     connectRedis();
     let mutation = new GraphQLObjectType({
         name : "RootUser",
         fields : {
-            ...UserMutation,
+            // ...UserMutation,
             ...PostMutation
         }
+
     })
     let query = new GraphQLObjectType({
         name: "RootQuery",
